@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
+import OffreCard from "../components/OffreCard.astro";
 
 const offres = [
 	{
@@ -52,7 +52,7 @@ const offres = [
 		<div class="space-y-4">
 			{
 				offres.map((offre) => (
-					<Card
+					<OffreCard
 						nomMaison={offre.nomMaison}
 						adresse={offre.adresse}
 						nbChambres={offre.nbChambres}
