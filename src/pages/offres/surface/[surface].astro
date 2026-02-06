@@ -1,0 +1,38 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import OffreCard from "../../../components/OffreCard.astro";
+import { getOffresBySurface } from "../../../backend.mjs";
+
+const { surface } = Astro.params;
+const minSurface = parseInt(surface || "0");
+const offres = await getOffresBySurface(minSurface);
+---
+
+<Layout titre={`Maisons de plus de ${minSurface} m²`}>
+    <div class="container mx-auto px-4 py-8">
+        <a
+            href="/offres"
+            class="text-blue-600 hover:underline mb-4 inline-block"
+        >
+            &larr; Retour aux offres
+        </a>
+
+        <h1 class="text-3xl font-bold mb-6">
+            Maisons avec une surface supérieure à {minSurface} m²
+        </h1>
+
+        {
+            offres.length === 0 ? (
+                <p class="text-gray-600">
+                    Aucune maison trouvée avec cette surface minimale.
+                </p>
+            ) : (
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {offres.map((offre) => (
+                        <OffreCard offre={offre} />
+                    ))}
+                </div>
+            )
+        }
+    </div>
+</Layout>

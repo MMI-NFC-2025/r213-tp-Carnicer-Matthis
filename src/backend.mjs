@@ -24,6 +24,19 @@ export async function getOffre(id) {
     }
 }
 
+export async function getOffresBySurface(minSurface) {
+    try {
+        const data = await db.collection('Maison').getFullList({
+            filter: `surface >= ${minSurface}`,
+            sort: '-created',
+        });
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant les maisons par surface', error);
+        return [];
+    }
+}
+
 export async function getImageUrl(record, recordImage) {
     return db.files.getURL(record, recordImage);
 }

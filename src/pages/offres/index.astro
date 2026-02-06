@@ -10,12 +10,20 @@ const offres = await getOffres();
 	<h1 class="text-3xl font-bold mb-6">Offres</h1>
 
 	<div class="container mx-auto px-4">
-		<button
-			id="favori-button"
-			class="bg-slate-600 rounded-lg text-white p-2 mb-4 hover:bg-slate-700 transition-colors"
-		>
-			Afficher les favoris
-		</button>
+		<div class="flex gap-4 mb-4">
+			<button
+				id="favori-button"
+				class="bg-slate-600 rounded-lg text-white p-2 hover:bg-slate-700 transition-colors"
+			>
+				Afficher les favoris
+			</button>
+			<a
+				href="/offres/surface/80"
+				class="bg-blue-600 rounded-lg text-white p-2 hover:bg-blue-700 transition-colors"
+			>
+				Maisons > 80 m²
+			</a>
+		</div>
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{offres.map((offre) => <OffreCard offre={offre} />)}
 		</div>
