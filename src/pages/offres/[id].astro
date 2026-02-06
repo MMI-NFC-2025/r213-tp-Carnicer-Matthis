@@ -1,0 +1,60 @@
+---
+import { getOffre } from "../../backend.mjs";
+import Layout from "../../layouts/Layout.astro";
+import PbImage from "../../components/PbImage.astro";
+
+const { id } = Astro.params;
+const offre = await getOffre(id);
+
+if (!offre) {
+    return Astro.redirect("/offres");
+}
+---
+
+<Layout titre={offre.nom_maison}>
+    <div class="container mx-auto px-4 py-8">
+        <a
+            href="/offres"
+            class="text-blue-600 hover:underline mb-4 inline-block"
+            >&larr; Retour aux offres</a
+        >
+
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            {
+                offre.images && offre.images.length > 0 && (
+                    <div class="w-full h-96 overflow-hidden">
+                        <PbImage record={offre} recordImage={offre.images[0]} />
+                    </div>
+                )
+            }
+
+            <div class="p-8">
+                <h1 class="text-4xl font-bold mb-6">{offre.nom_maison}</h1>
+
+                <div class="mb-6">
+                    <p class="text-3xl font-bold text-blue-600">
+                        {offre.prix}€<span class="text-lg text-gray-500"
+                            >/mois</span
+                        >
+                    </p>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="text-2xl font-semibold mb-4">Détails</h2>
+                    <ul class="space-y-2 text-gray-700">
+                        <li><strong>Adresse:</strong> {offre.adresse}</li>
+                        <li>
+                            <strong>Nombre de chambres:</strong>
+                            {offre.nb_Chambres}
+                        </li>
+                        <li>
+                            <strong>Nombre de salles de bain:</strong>
+                            {offre.nb_Sdb}
+                        </li>
+                        <li><strong>Surface:</strong> {offre.surface} m²</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
