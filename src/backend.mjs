@@ -66,6 +66,45 @@ export async function filterByPrix(minPrix, maxPrix) {
     }
 }
 
+export async function getAgents() {
+    try {
+        const data = await db.collection('Agent').getFullList({
+            sort: '-created',
+        });
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant la liste des agents', error);
+        return [];
+    }
+}
+
+export async function getAgent(id) {
+    try {
+        const data = await db.collection('Agent').getOne(id);
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant l\'agent', error);
+        return null;
+    }
+}
+
+export async function getOffresByAgent(agentId) {
+    try {
+        const data = await db.collection('Maison').getFullList({
+            filter: `Agent = "${agentId}"`,
+            sort: '-created',
+        });
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant les offres de l\'agent', error);
+        return [];
+    }
+}
+
+export async function setFavori(house) {
+    await db.collection('maison').update(house.id, { favori: !house.favori });
+}
+
 export async function getImageUrl(record, recordImage) {
     return db.files.getURL(record, recordImage);
 }

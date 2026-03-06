@@ -27,56 +27,321 @@ if (Astro.request.method === "POST") {
 ---
 
 <Layout titre="Offres">
-	<h1 class="text-3xl font-bold mb-6">Offres</h1>
-
 	<div class="container mx-auto px-4">
-		<form action="/offres" method="POST" class="mb-4">
-			<input
-				type="number"
-				name="minPrix"
-				placeholder="Prix minimum"
-				class="p-2 border border-gray-300 rounded-md"
-			/>
-			<input
-				type="number"
-				name="maxPrix"
-				placeholder="Prix maximum"
-				class="p-2 border border-gray-300 rounded-md"
-			/>
-			<input
-				type="submit"
-				value="Filtrer par prix"
-				class="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
-			/>
-		</form>
+		<h1 class="page-title">Toutes nos offres</h1>
+
+		<!-- Filtres -->
+		<div class="filters-container">
+			<form action="/offres" method="POST" class="filter-form">
+				<div class="filter-header">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<polygon
+							points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+						></polygon>
+					</svg>
+					<h3 class="filter-title">Filtrer par prix</h3>
+				</div>
+				<div class="filter-inputs">
+					<div class="input-group">
+						<label for="minPrix">Prix minimum</label>
+						<input
+							type="number"
+							id="minPrix"
+							name="minPrix"
+							placeholder="0 €"
+							class="filter-input"
+						/>
+					</div>
+					<div class="input-group">
+						<label for="maxPrix">Prix maximum</label>
+						<input
+							type="number"
+							id="maxPrix"
+							name="maxPrix"
+							placeholder="10000 €"
+							class="filter-input"
+						/>
+					</div>
+					<button type="submit" class="filter-submit">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="18"
+							height="18"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<circle cx="11" cy="11" r="8"></circle>
+							<path d="m21 21-4.35-4.35"></path>
+						</svg>
+						Rechercher
+					</button>
+				</div>
+			</form>
+
+			<div class="quick-filters">
+				<button id="favori-button" class="quick-filter-btn favori-btn">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path
+							d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+						></path>
+					</svg>
+					Voir les favoris
+				</button>
+				<a
+					href="/offres/surface/80"
+					class="quick-filter-btn surface-btn"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<rect x="3" y="3" width="18" height="18" rx="2" ry="2"
+						></rect>
+					</svg>
+					Surface > 80 m²
+				</a>
+			</div>
+		</div>
 
 		{
 			message && (
-				<div class="p-4 mb-4 rounded-md bg-blue-100 text-blue-800">
-					{message}
+				<div
+					class={`message-box ${message.includes("Pas") ? "message-error" : "message-success"}`}
+				>
+					<div class="message-icon">
+						{message.includes("Pas") ? "❌" : "✓"}
+					</div>
+					<p class="message-text">{message}</p>
 				</div>
 			)
 		}
 
-		<div class="flex gap-4 mb-4">
-			<button
-				id="favori-button"
-				class="bg-slate-600 rounded-lg text-white p-2 hover:bg-slate-700 transition-colors"
-			>
-				Afficher les favoris
-			</button>
-			<a
-				href="/offres/surface/80"
-				class="bg-blue-600 rounded-lg text-white p-2 hover:bg-blue-700 transition-colors"
-			>
-				Maisons > 80 m²
-			</a>
-		</div>
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{Offres.map((offre) => <OffreCard offre={offre} />)}
 		</div>
 	</div>
 </Layout>
+
+<style>
+	.page-title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		margin-bottom: 2rem;
+	}
+
+	.filters-container {
+		background: white;
+		border-radius: 16px;
+		padding: 24px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		margin-bottom: 2rem;
+	}
+
+	.filter-form {
+		margin-bottom: 24px;
+		padding-bottom: 24px;
+		border-bottom: 2px solid #f3f4f6;
+	}
+
+	.filter-header {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 20px;
+		color: #1e293b;
+	}
+
+	.filter-header svg {
+		color: #2563eb;
+	}
+
+	.filter-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0;
+	}
+
+	.filter-inputs {
+		display: grid;
+		grid-template-columns: 1fr 1fr auto;
+		gap: 16px;
+		align-items: end;
+	}
+
+	@media (max-width: 768px) {
+		.filter-inputs {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.input-group label {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #4b5563;
+	}
+
+	.filter-input {
+		padding: 12px 16px;
+		border: 2px solid #e5e7eb;
+		border-radius: 10px;
+		font-size: 1rem;
+		transition: all 0.3s ease;
+		background: #f9fafb;
+	}
+
+	.filter-input:focus {
+		outline: none;
+		border-color: #2563eb;
+		background: white;
+		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+	}
+
+	.filter-input::placeholder {
+		color: #9ca3af;
+	}
+
+	.filter-submit {
+		padding: 12px 24px;
+		background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+		color: white;
+		border: none;
+		border-radius: 10px;
+		font-weight: 600;
+		font-size: 1rem;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+	}
+
+	.filter-submit:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+	}
+
+	.filter-submit:active {
+		transform: translateY(0);
+	}
+
+	.quick-filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
+	.quick-filter-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 20px;
+		border-radius: 10px;
+		font-weight: 600;
+		font-size: 0.9375rem;
+		text-decoration: none;
+		border: 2px solid transparent;
+		transition: all 0.3s ease;
+		cursor: pointer;
+	}
+
+	.favori-btn {
+		background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+		color: white;
+		box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+	}
+
+	.favori-btn:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+	}
+
+	.surface-btn {
+		background: #f3f4f6;
+		color: #1e293b;
+		border-color: #e5e7eb;
+	}
+
+	.surface-btn:hover {
+		background: #e5e7eb;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.message-box {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 16px 20px;
+		border-radius: 12px;
+		margin-bottom: 2rem;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.message-success {
+		background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+		border: 2px solid #6ee7b7;
+		color: #065f46;
+	}
+
+	.message-error {
+		background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+		border: 2px solid #fca5a5;
+		color: #991b1b;
+	}
+
+	.message-icon {
+		font-size: 1.5rem;
+		line-height: 1;
+	}
+
+	.message-text {
+		margin: 0;
+		font-weight: 600;
+		font-size: 0.9375rem;
+	}
+</style>
 
 <script>
 	const button = document.getElementById("favori-button");

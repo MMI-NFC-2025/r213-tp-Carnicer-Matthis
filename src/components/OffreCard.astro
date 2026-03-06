@@ -6,84 +6,319 @@ interface Props {
 }
 
 const { offre } = Astro.props;
-const { nom_maison, adresse, nb_Chambres, nb_Sdb, surface, prix, favori, images } =
-    offre;
+const {
+    nom_maison,
+    adresse,
+    nb_Chambres,
+    nb_Sdb,
+    surface,
+    prix,
+    favori,
+    images,
+} = offre;
 ---
 
-<div
-    class="offre bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-200"
-    data-favori={favori?.toString()}
->
-    {
-        images && images.length > 0 && (
-            <div class="w-full h-48 overflow-hidden">
+<div class="offre-card-modern group" data-favori={favori?.toString()}>
+    <div class="offre-image-container">
+        {
+            images && images.length > 0 && (
                 <PbImage record={offre} recordImage={images[0]} />
-            </div>
-        )
-    }
-    <div class="p-6">
-        <div class="flex justify-between items-start mb-3">
-            <h2 class="text-xl font-bold text-gray-800">
-                {nom_maison}
-            </h2>
-        </div>
-        <div class="flex items-center gap-4 mt-4 text-sm text-gray-700">
-         
-        </div>
-        <div
-            class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200"
-        >
-            <p class="text-2xl font-bold text-blue-600">
-                {prix}€<span class="text-sm text-gray-500">/mois</span>
-            </p>
-            <button
-                class="favori-btn px-4 py-2 ml-4 rounded-lg text-base font-semibold transition-all duration-300 hover:scale-110"
-                aria-label="Marquer comme favori"
+            )
+        }
+        <button class="favori-btn-modern" aria-label="Marquer comme favori">
+            <svg
+                class="heart-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill={favori ? "red" : "none"}
+                stroke={favori ? "red" : "currentColor"}
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             >
-                Favori
-            </button>
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                ></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="offre-content">
+        <h2 class="offre-title">{nom_maison}</h2>
+
+        {adresse && <p class="offre-address">📍 {adresse}</p>}
+
+        <div class="offre-features">
+            {
+                nb_Chambres && (
+                    <span class="feature">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        {nb_Chambres} ch.
+                    </span>
+                )
+            }
+            {
+                nb_Sdb && (
+                    <span class="feature">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
+                            <line x1="10" y1="5" x2="8" y2="7" />
+                            <line x1="2" y1="12" x2="22" y2="12" />
+                            <line x1="7" y1="19" x2="7" y2="22" />
+                            <line x1="17" y1="19" x2="17" y2="22" />
+                        </svg>
+                        {nb_Sdb} sdb
+                    </span>
+                )
+            }
+            {surface && <span class="feature">📐 {surface} m²</span>}
+        </div>
+
+        <div class="offre-footer">
+            <p class="offre-price">
+                {prix}€<span class="offre-period">/mois</span>
+            </p>
+            <a href={`/offres/${offre.id}`} class="offre-link">
+                Voir détails
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
         </div>
     </div>
 </div>
 
+<style>
+    .offre-card-modern {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .offre-card-modern:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .offre-card-modern[data-favori="true"] {
+        border: 2px solid #fbbf24;
+        background: linear-gradient(to bottom, #fffbeb 0%, white 100%);
+    }
+
+    .offre-image-container {
+        position: relative;
+        width: 100%;
+        height: 240px;
+        overflow: hidden;
+        background: #f0f0f0;
+    }
+
+    .offre-image-container :global(img) {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .offre-card-modern:hover .offre-image-container :global(img) {
+        transform: scale(1.1);
+    }
+
+    .favori-btn-modern {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+    }
+
+    .favori-btn-modern:hover {
+        transform: scale(1.1);
+        background: white;
+    }
+
+    .favori-btn-modern:active {
+        transform: scale(0.95);
+    }
+
+    .heart-icon {
+        transition: all 0.3s ease;
+    }
+
+    .favori-btn-modern:hover .heart-icon {
+        transform: scale(1.1);
+    }
+
+    .offre-content {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .offre-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .offre-address {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .offre-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .feature {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.875rem;
+        color: #6b7280;
+        background: #f3f4f6;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    .feature svg {
+        color: #9ca3af;
+    }
+
+    .offre-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .offre-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin: 0;
+    }
+
+    .offre-period {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: #6b7280;
+    }
+
+    .offre-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 16px;
+        background: #eff6ff;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .offre-link:hover {
+        background: #dbeafe;
+        gap: 9px;
+    }
+
+    .offre-link svg {
+        transition: transform 0.3s ease;
+    }
+
+    .offre-link:hover svg {
+        transform: translateX(3px);
+    }
+</style>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const cards = document.querySelectorAll(".offre");
+        const cards = document.querySelectorAll(".offre-card-modern");
 
         cards.forEach((card) => {
-            const button = card.querySelector(".favori-btn");
+            const button = card.querySelector(".favori-btn-modern");
             if (!button) return;
 
-            const isFavori = card.getAttribute("data-favori") === "true";
-
-            // Définir l'état initial
-            if (isFavori) {
-                card.classList.add("bg-yellow-50", "border-yellow-300");
-                card.classList.remove("bg-white");
-                button.classList.add("bg-red-500", "text-white");
-            } else {
-                button.classList.add("bg-gray-200", "text-gray-600");
-            }
-
-            // Gérer le clic sur le bouton
             button.addEventListener("click", () => {
                 const currentFavori =
                     card.getAttribute("data-favori") === "true";
+                const newFavori = !currentFavori;
 
-                if (currentFavori) {
-                    // Retirer des favoris
-                    card.setAttribute("data-favori", "false");
-                    card.classList.remove("bg-yellow-50", "border-yellow-300");
-                    card.classList.add("bg-white");
-                    button.classList.remove("bg-red-500", "text-white");
-                    button.classList.add("bg-gray-200", "text-gray-600");
-                } else {
-                    // Ajouter aux favoris
-                    card.setAttribute("data-favori", "true");
-                    card.classList.add("bg-yellow-50", "border-yellow-300");
-                    card.classList.remove("bg-white");
-                    button.classList.remove("bg-gray-200", "text-gray-600");
-                    button.classList.add("bg-red-500", "text-white");
+                card.setAttribute("data-favori", newFavori.toString());
+
+                const heartIcon = button.querySelector(".heart-icon");
+                if (heartIcon) {
+                    heartIcon.setAttribute("fill", newFavori ? "red" : "none");
+                    heartIcon.setAttribute(
+                        "stroke",
+                        newFavori ? "red" : "currentColor",
+                    );
                 }
             });
         });
